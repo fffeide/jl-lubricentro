@@ -1,0 +1,225 @@
+{
+  "entities": {
+    "Auto": {
+      "title": "Auto",
+      "description": "Vehículo registrado en JL Lubricentro",
+      "type": "object",
+      "properties": {
+        "marca": { "type": "string", "maxLength": 64 },
+        "modelo": { "type": "string", "maxLength": 64 },
+        "año": { "type": "number" },
+        "patente": { "type": "string", "maxLength": 16 },
+        "motor": { "type": "string", "maxLength": 64 },
+        "kilometraje_actual": { "type": "number" },
+        "aceite_recomendado": { "type": "string", "maxLength": 128 },
+        "filtro_recomendado": { "type": "string", "maxLength": 128 },
+        "notas": { "type": "string", "maxLength": 500 },
+        "dni_titular": { "type": "string", "maxLength": 32 },
+        "nombre_titular": { "type": "string", "maxLength": 128 },
+        "email_titular": { "type": "string", "maxLength": 128 },
+        "telefono_titular": { "type": "string", "maxLength": 32 },
+        "familia_id": { "type": "string", "maxLength": 64 },
+        "grupo_id": { "type": "string", "maxLength": 64 },
+        "es_vehiculo_empresa": { "type": "boolean" },
+        "familia_sugerida_auto_id": { "type": "string", "maxLength": 64 },
+        "familia_sugerida_titular": { "type": "string", "maxLength": 128 },
+        "datos_completados": { "type": "boolean" },
+        "recibir_aviso_service": { "type": "boolean" },
+        "fecha_aviso_service": { "type": "string", "maxLength": 32 },
+        "familia_prompt_mostrado": { "type": "boolean" },
+        "puntos": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["marca", "modelo", "patente"]
+    },
+    "Servicio": {
+      "title": "Servicio",
+      "description": "Historial de service realizado a un vehículo",
+      "type": "object",
+      "properties": {
+        "auto_id": { "type": "string", "maxLength": 64 },
+        "fecha_servicio": { "type": "string", "maxLength": 32 },
+        "kilometraje": { "type": "number" },
+        "tipo_servicio": { "type": "string", "maxLength": 64 },
+        "tipo_caja": { "type": "string", "maxLength": 32 },
+        "aceite_usado": { "type": "string", "maxLength": 128 },
+        "litros_aceite": { "type": "number" },
+        "filtro_aceite": { "type": "string", "maxLength": 16 },
+        "filtro_aire": { "type": "string", "maxLength": 16 },
+        "filtro_combustible": { "type": "string", "maxLength": 16 },
+        "filtro_habitaculo": { "type": "string", "maxLength": 16 },
+        "aceite_caja": { "type": "string", "maxLength": 128 },
+        "proximo_service_km": { "type": "number" },
+        "proximo_service_fecha": { "type": "string", "maxLength": 32 },
+        "notas_tecnico": { "type": "string", "maxLength": 500 },
+        "monto": { "type": "number" },
+        "whatsapp_recordatorio_enviado": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["auto_id", "fecha_servicio", "kilometraje", "tipo_servicio"]
+    },
+    "Familia": {
+      "title": "Familia",
+      "description": "Grupo familiar que comparte autos o historial",
+      "type": "object",
+      "properties": {
+        "codigo_invitacion": { "type": "string", "maxLength": 16 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["codigo_invitacion"]
+    },
+    "Grupo": {
+      "title": "Grupo",
+      "description": "Empresa o cliente corporativo con flota",
+      "type": "object",
+      "properties": {
+        "nombre": { "type": "string", "maxLength": 128 },
+        "tipo_empresa": { "type": "string", "maxLength": 64 },
+        "cuit": { "type": "string", "maxLength": 32 },
+        "contacto_nombre": { "type": "string", "maxLength": 128 },
+        "contacto_email": { "type": "string", "maxLength": 128 },
+        "telefono": { "type": "string", "maxLength": 32 },
+        "direccion": { "type": "string", "maxLength": 256 },
+        "activa": { "type": "boolean" },
+        "notas": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["nombre"]
+    },
+    "MiembroGrupo": {
+      "title": "MiembroGrupo",
+      "description": "Usuario con acceso a una empresa/flota",
+      "type": "object",
+      "properties": {
+        "grupo_id": { "type": "string", "maxLength": 64 },
+        "grupo_nombre": { "type": "string", "maxLength": 128 },
+        "nombre": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 128 },
+        "telefono": { "type": "string", "maxLength": 32 },
+        "rol": { "type": "string", "maxLength": 64 },
+        "nivel_acceso": { "type": "string", "maxLength": 32 },
+        "activo": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["grupo_id", "nombre", "rol"]
+    },
+    "Producto": {
+      "title": "Producto",
+      "description": "Artículo de catálogo o stock en el taller",
+      "type": "object",
+      "properties": {
+        "nombre": { "type": "string", "maxLength": 128 },
+        "categoria": { "type": "string", "maxLength": 64 },
+        "marca": { "type": "string", "maxLength": 64 },
+        "descripcion": { "type": "string", "maxLength": 500 },
+        "imagen_url": { "type": "string", "maxLength": 500 },
+        "precio_referencia": { "type": "number" },
+        "stock_disponible": { "type": "boolean" },
+        "stock_cantidad": { "type": "number" },
+        "codigo_barras": { "type": "string", "maxLength": 64 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["nombre", "categoria"]
+    },
+    "Venta": {
+      "title": "Venta",
+      "description": "Registro de venta en mostrador o punto de venta",
+      "type": "object",
+      "properties": {
+        "auto_id": { "type": "string", "maxLength": 64 },
+        "cliente_nombre": { "type": "string", "maxLength": 128 },
+        "patente": { "type": "string", "maxLength": 16 },
+        "monto_total": { "type": "number" },
+        "fecha": { "type": "string", "maxLength": 32 },
+        "forma_pago": { "type": "string", "maxLength": 32 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["monto_total", "fecha"]
+    },
+    "FidelidadConfig": {
+      "title": "FidelidadConfig",
+      "description": "Configuración del programa de puntos de fidelidad",
+      "type": "object",
+      "properties": {
+        "modo": { "type": "string", "maxLength": 32 },
+        "monto_por_punto": { "type": "number" },
+        "puntos_fijos": { "type": "number" },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["modo"]
+    },
+    "Recompensa": {
+      "title": "Recompensa",
+      "description": "Premios canjeables con puntos de fidelidad",
+      "type": "object",
+      "properties": {
+        "nombre": { "type": "string", "maxLength": 128 },
+        "descripcion": { "type": "string", "maxLength": 500 },
+        "puntos_necesarios": { "type": "number" },
+        "activa": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["nombre", "puntos_necesarios"]
+    },
+    "Canje": {
+      "title": "Canje",
+      "description": "Canje de recompensa por un titular",
+      "type": "object",
+      "properties": {
+        "auto_id": { "type": "string", "maxLength": 64 },
+        "patente": { "type": "string", "maxLength": 16 },
+        "cliente_nombre": { "type": "string", "maxLength": 128 },
+        "recompensa_id": { "type": "string", "maxLength": 64 },
+        "recompensa_nombre": { "type": "string", "maxLength": 128 },
+        "puntos_gastados": { "type": "number" },
+        "fecha": { "type": "string", "maxLength": 32 },
+        "realizado": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["puntos_gastados"]
+    }
+  },
+  "firestore": {
+    "/autos/{autoId}": {
+      "schema": "Auto",
+      "description": "Colección de vehículos registrados"
+    },
+    "/servicios/{servicioId}": {
+      "schema": "Servicio",
+      "description": "Historial de servicios efectuados a los vehículos"
+    },
+    "/familias/{familiaId}": {
+      "schema": "Familia",
+      "description": "Grupos de familias con código de invitación"
+    },
+    "/grupos/{grupoId}": {
+      "schema": "Grupo",
+      "description": "Empresas y flotas corporativas"
+    },
+    "/miembros_grupos/{miembroId}": {
+      "schema": "MiembroGrupo",
+      "description": "Miembros asignados a empresas"
+    },
+    "/productos/{productoId}": {
+      "schema": "Producto",
+      "description": "Catálogo de repuestos, lubricantes y artículos"
+    },
+    "/ventas/{ventaId}": {
+      "schema": "Venta",
+      "description": "Transacciones de caja / mostrador"
+    },
+    "/config/fidelidad": {
+      "schema": "FidelidadConfig",
+      "description": "Configuración del programa de puntos de fidelidad"
+    },
+    "/recompensas/{recompensaId}": {
+      "schema": "Recompensa",
+      "description": "Premios canjeables con puntos"
+    },
+    "/canjes/{canjeId}": {
+      "schema": "Canje",
+      "description": "Historial de canjes de premios"
+    }
+  }
+}

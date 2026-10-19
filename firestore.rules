@@ -1,0 +1,117 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny Catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Auto validation
+    function isValidAutoCreate(data) {
+      return data.keys().hasAll(['marca', 'modelo', 'patente'])
+        && data.marca is string && data.marca.size() <= 64
+        && data.modelo is string && data.modelo.size() <= 64
+        && data.patente is string && data.patente.size() <= 16
+        && (!('puntos' in data) || data.puntos == 0);
+    }
+
+    function isClientAllowedAutoUpdate() {
+      return incoming().diff(existing()).affectedKeys().hasOnly([
+        'nombre_titular',
+        'telefono_titular',
+        'email_titular',
+        'familia_prompt_mostrado',
+        'recibir_aviso_service',
+        'fecha_aviso_service',
+        'datos_completados',
+        'familia_id',
+        'updatedAt'
+      ]);
+    }
+
+    // 1. Autos collection
+    match /autos/{autoId} {
+      allow read: if true;
+      allow create: if (isSignedIn() || isValidAutoCreate(incoming())) && isValidId(autoId);
+      allow update: if isValidId(autoId) && (isSignedIn() || isClientAllowedAutoUpdate());
+      allow delete: if isSignedIn() && isValidId(autoId);
+    }
+
+    // 2. Servicios collection
+    match /servicios/{servicioId} {
+      allow read: if true;
+      allow write: if isSignedIn() && isValidId(servicioId);
+    }
+
+    // 3. Familias collection
+    match /familias/{familiaId} {
+      allow read: if true;
+      allow write: if (isSignedIn() || (isValidId(familiaId) && incoming().keys().hasAll(['codigo_invitacion'])));
+    }
+
+    // 4. Grupos (Empresas)
+    match /grupos/{grupoId} {
+      allow read: if true;
+      allow write: if isSignedIn() && isValidId(grupoId);
+    }
+
+    // 5. Miembros de Grupos
+    match /miembros_grupos/{miembroId} {
+      allow read: if true;
+      allow write: if isSignedIn() && isValidId(miembroId);
+    }
+
+    // 6. Productos
+    match /productos/{productoId} {
+      allow read: if true;
+      allow write: if isSignedIn() && isValidId(productoId);
+    }
+
+    // 7. Ventas
+    match /ventas/{ventaId} {
+      allow read, write: if isSignedIn() && isValidId(ventaId);
+    }
+
+    // 8. Configuración (Fidelidad u otras)
+    match /config/{configId} {
+      allow read: if true;
+      allow write: if isSignedIn() && isValidId(configId);
+    }
+
+    // 9. Recompensas
+    match /recompensas/{recompensaId} {
+      allow read: if true;
+      allow write: if isSignedIn() && isValidId(recompensaId);
+    }
+
+    // 10. Canjes
+    match /canjes/{canjeId} {
+      allow read: if true;
+      allow create: if isValidId(canjeId);
+      allow update, delete: if isSignedIn() && isValidId(canjeId);
+    }
+
+    // Test connection doc
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+  }
+}
